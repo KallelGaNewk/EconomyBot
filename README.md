@@ -5,8 +5,8 @@ This is a code base to guide beginners of [quick.db](https://www.npmjs.com/packa
 ## Requirements
 
 Node.JS v12+<br>
-npm v6++<br>
-Python 3.7 (Because of quick.db, but idk)+<br>
+npm v6+<br>
+Python 3.7 (Because of quick.db, but idk)<br>
 
 ## LICENSE
 
