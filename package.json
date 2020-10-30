@@ -1,0 +1,25 @@
+{
+  "name": "utilsbot",
+  "version": "0.0.1",
+  "description": "Utils for Discord",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "dev": "nodemon main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KallelGaNewk/utilsbot.git"
+  },
+  "author": "kallelganewk",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KallelGaNewk/utilsbot/issues"
+  },
+  "homepage": "https://github.com/KallelGaNewk/utilsbot#readme",
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "discord.js": "^12.4.0",
+    "quick.db": "^7.1.3"
+  }
+}
