@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const config = require('../config/config.js');
-const Utils = require('../Utils.js');
+const Utils = require('../utils');
 const { getUserWallet, schema } = require('../utils/walletUtils.js');
 
 module.exports = {

@@ -1,6 +1,6 @@
 const c = require('chalk');
 const { MessageEmbed } = require('discord.js');
-const config = require('./config/config.js');
+const config = require('../config/config.js');
 
 module.exports.logger = {
     debug(text) {

@@ -1,50 +1,45 @@
 const walletSchema = require('../database/WalletSchema');
 
-const createUserWallet = async (user_id, balance) => {
-  const userBalance = balance >= 0 ? balance : 0;
+const createUserWallet = (user_id, initialBalance) =>
+  new Promise(async (resolve) => {
+    const balance = initialBalance >= 0 ? initialBalance : 0;
 
-  return await walletSchema.create({
-    user_id: user_id,
-    balance: userBalance,
+    const newUserWallet = await walletSchema.create({
+      user_id,
+      balance,
+    });
+
+    resolve(newUserWallet);
   });
-};
 
-const getUserWallet = async (user_id) => {
-  try {
-    let [userWallet] = await walletSchema.find({ user_id: user_id }).lean();
-    //console.log('cuy', userWallet)
-    return userWallet;
-  } catch (_) {
-    return;
-  }
-};
+const getUserWallet = (user_id) =>
+  new Promise(async (resolve) => {
+    try {
+      let userWallet = await walletSchema.findOne({ user_id: user_id }).lean();
+      if (userWallet === null) {
+        userWallet = await createUserWallet(user_id, 0);
+      }
+      resolve(userWallet);
+    } catch (_) {
+      resolve();
+    }
+  });
 
-const setUserBalance = async (user_id, balance) => {
-  const userWallet = getUserWallet(user_id);
+const setUserWallet = (user_id, key, value) =>
+  new Promise(async (resolve) => {
+    let newObject = {};
+    newObject[key] = value;
 
-  const userBalance = balance >= 0 ? balance : 0;
+    let userWallet = await getUserWallet(user_id);
+    await walletSchema.findOneAndUpdate({ user_id }, newObject);
+    userWallet = await getUserWallet(user_id);
 
-  if (!userWallet) {
-    await createUserWallet(user_id, userBalance);
-  } else {
-    await walletSchema.findOneAndUpdate(
-      { user_id: user_id },
-      { balance: userBalance },
-    );
-  }
-
-
-};
-
-const getUserBalance = async (user_id) => {
-  const userWallet = getUserWallet(user_id);
-  return userWallet.balance;
-};
+    resolve(userWallet);
+  });
 
 module.exports = {
   schema: walletSchema,
   createUserWallet,
   getUserWallet,
-  setUserBalance,
-  getUserBalance,
+  setUserWallet,
 };

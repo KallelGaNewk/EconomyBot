@@ -1,5 +1,5 @@
 const config = require('../config/config.js');
-const Utils = require('../Utils.js');
+const Utils = require('../utils');
 const { getUserBalance, setUserBalance } = require('../utils/walletUtils.js');
 
 module.exports = {
@@ -11,14 +11,7 @@ module.exports = {
   guildOnly: false,
   permission: '*',
   async execute(client, message, args) {
-    let balance = getUserBalance(message.author.id);
-
-    console.log(balance)
-
-    if (balance === undefined) {
-      console.log(balance);
-      balance = createUserWallet(user.id, 0);
-    }
+    let userWallet = await getUserWallet(message.author.id);
 
     const userToTransfer =
       message.mentions.users.first() || client.users.cache.get(args[0]);
@@ -31,28 +24,20 @@ module.exports = {
       );
     }
 
-    const userToTransferBalance = await getUserBalance(userToTransfer.id);
+    const userToTransferWallet = await getUserWallet(userToTransfer.id);
 
-    console.log(userToTransferBalance)
-
-    if (userToTransferBalance === undefined) {
-      return Utils.createDefaultEmbed(
-        message,
-        `This user is not registered, ask them to do \`${config.prefix}balance\``,
-      );
-    }
-
-    if (balance < amountToTransfer) {
+    if (userWallet.balance < amountToTransfer) {
       return Utils.createDefaultEmbed(
         message,
         `You don't have that amount. Your balance: **\`$${balance}\`**`,
       );
     }
 
-    setUserBalance(message.author.id, balance - amountToTransfer);
-    setUserBalance(
+    setUserWallet(message.author.id, 'balance', userWallet.balance - amountToTransfer);
+    setUserWallet(
       userToTransfer.id,
-      userToTransferBalance + amountToTransfer,
+      'balance',
+      userToTransferWallet.balance + amountToTransfer,
     );
 
     Utils.createDefaultEmbed(

@@ -1,7 +1,7 @@
 
 require('dotenv').config();
 
-const { Collection, MessageEmbed } = require('discord.js');
+const { Collection, MessageEmbed, Client } = require('discord.js');
 const fs = require('fs');
 const {
   prefix,
@@ -9,12 +9,12 @@ const {
   imagecfg,
   defaultCooldown,
 } = require('./src/config/config.js');
-const Client = require('./src/config/Client.js');
-const Utils = require('./src/Utils.js');
+const Utils = require('./src/utils');
 require('./src/database')();
 
 const client = new Client();
 const cooldowns = new Collection();
+client.commands = new Collection();
 
 const commandFiles = fs
   .readdirSync('./src/commands')

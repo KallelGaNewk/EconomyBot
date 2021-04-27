@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const config = require('../config/config.js');
-const { getUserBalance, createUserWallet } = require('../utils/walletUtils');
+const { getUserWallet } = require('../utils/walletUtils');
 
 module.exports = {
   name: 'balance',
@@ -12,15 +12,11 @@ module.exports = {
   permission: '*',
   async execute(client, message, args) {
     const userID = message.author.id;
-    let balance = await getUserBalance(userID);
-
-    if (balance === undefined) {
-      balance = (await createUserWallet(userID, 0)).balance;
-    }
-
+    let userWallet = await getUserWallet(userID);
+    
     const embed = new MessageEmbed()
       .setTitle('Your balance')
-      .setDescription(`**\`$${balance}\`**`)
+      .setDescription(`**\`$${userWallet.balance}\`**`)
       .setColor(config.color)
       .setFooter(
         message.author.tag,
