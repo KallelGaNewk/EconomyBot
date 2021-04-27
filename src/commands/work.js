@@ -1,7 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 const config = require('../config/config.js');
 const Utils = require('../utils');
-const { getUserWallet, schema } = require('../utils/walletUtils.js');
+const { getUserWallet, setUserWallet } = require('../utils/walletUtils.js');
 
 module.exports = {
   name: 'work',
@@ -12,14 +12,12 @@ module.exports = {
   guildOnly: false,
   permission: '*',
   async execute(client, message, args) {
+    let userWallet = await getUserWallet(message.author.id);
     const now = Date.now();
   
-    let { lastRedeem } = getUserWallet(message.author.id);
+    let { lastRedeem } = await getUserWallet(message.author.id);
     if (!lastRedeem) {
-      await schema.findOneAndUpdate(
-        { user_id: message.author.id },
-        { lastRedeem: now },
-      );
+      await setUserWallet(message.author.id, 'lastRedeem', now);
     }
   
     if (now - parseInt(lastRedeem) < 86400000) {
@@ -35,11 +33,8 @@ module.exports = {
     } else {
       const moneyToAdd = Utils.randomIntFromInterval(500, 1000);
   
-      await schema.findOneAndUpdate(
-        { user_id: message.author.id },
-        { lastRedeem: now },
-      );
-      setUserBalance(message.author.id, moneyToAdd + balance);
+      await setUserWallet(message.author.id, 'lastRedeem', now);
+      await setUserWallet(message.author.id, 'balance', moneyToAdd + userWallet.balance);
   
       let embed = new MessageEmbed()
         .setTitle('You worked!')

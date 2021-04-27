@@ -1,6 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 const { developers } = require('../config/config.js');
-const { getUserWallet, setUserWallet } = require('../utils/walletUtils');
+const config = require('../config/config');
+const { setUserWallet } = require('../utils/walletUtils');
 
 module.exports = {
   name: 'editbal',
@@ -22,7 +23,8 @@ module.exports = {
       return message.channel.send(":x: **Mention a valid user**");
     }
 
-    const newBalance = parseInt(args[1]);
+    let newBalance = parseInt(args[1]);
+    newBalance = newBalance < 0 ? 0 : newBalance;
 
     if (isNaN(newBalance)) {
       return message.channel.send(":x: **Invalid balance**");
