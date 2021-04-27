@@ -2,6 +2,7 @@ const { MessageEmbed } = require('discord.js');
 const config = require('../config/config.js');
 const Utils = require('../utils');
 const { getUserWallet, setUserWallet } = require('../utils/walletUtils.js');
+const moment = require('moment');
 
 module.exports = {
   name: 'work',
@@ -23,6 +24,7 @@ module.exports = {
     if (now - parseInt(lastRedeem) < 86400000) {
       let embed = new MessageEmbed()
         .setDescription('Have you worked today!')
+        .addField('Last redeem', moment(lastRedeem).fromNow())
         .setColor(config.color)
         .setFooter(
           message.author.tag,
