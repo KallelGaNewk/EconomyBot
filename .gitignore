@@ -1,12 +1,4 @@
-<<<<<<< Updated upstream
-
-node_modules/
-test.*
-json.sqlite
-.env
-=======
 node_modules/
 .env
 test.*
 *.sqlite
->>>>>>> Stashed changes
