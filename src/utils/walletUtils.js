@@ -15,7 +15,7 @@ const createUserWallet = (user_id, initialBalance) =>
 const getUserWallet = (user_id) =>
   new Promise(async (resolve) => {
     try {
-      let userWallet = await walletSchema.findOne({ user_id: user_id }).lean();
+      let userWallet = await walletSchema.findOne({ user_id }).lean();
       if (userWallet === null) {
         userWallet = await createUserWallet(user_id, 0);
       }
