@@ -31,3 +31,4 @@ module.exports.createDefaultEmbed = (message, text) => {
 
     return message.channel.send(embed);
 }
+

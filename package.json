@@ -4,8 +4,7 @@
   "description": "Utils for Discord",
   "main": "main.js",
   "scripts": {
-    "start": "node main.js",
-    "dev": "nodemon main.js"
+    "start": "node main.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +19,7 @@
   "dependencies": {
     "chalk": "^4.1.1",
     "discord.js": "^12.5.3",
+    "dotenv": "^8.2.0",
     "mongoose": "^5.12.5",
     "quick.db": "^7.1.3"
   }
