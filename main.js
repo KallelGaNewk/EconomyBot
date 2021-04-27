@@ -1,10 +1,11 @@
 const { Collection, MessageEmbed } = require('discord.js');
-const db = require('quick.db');
 const fs = require('fs');
 const { prefix, color, imagecfg, defaultCooldown } = require('./src/config/config.js');
 const { discordToken } = require('./src/config/tokens.js');
 const Client = require('./src/config/Client.js');
 const Utils = require('./src/Utils.js');
+const db = require('./src/database')();
+
 const client = new Client();
 const cooldowns = new Collection();
 
@@ -17,6 +18,8 @@ for (const file of commandFiles) {
   client.commands.set(command.name, command);
   console.log(`[+] Loaded ${command.name}`);
 };
+
+client.db = db;
 
 client.once('ready', () => {
   Utils.logger.success(`Discord instance ready in user ${client.user.tag} (${client.user.id})`);
