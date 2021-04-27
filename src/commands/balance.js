@@ -15,8 +15,7 @@ module.exports = {
     let balance = await getUserBalance(userID);
 
     if (balance === undefined) {
-			console.log(balance)
-      balance = await createUserWallet(userID, 0);
+      balance = (await createUserWallet(userID, 0)).balance;
     }
 
     const embed = new MessageEmbed()

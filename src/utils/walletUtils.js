@@ -12,6 +12,7 @@ const createUserWallet = async (user_id, balance) => {
 const getUserWallet = async (user_id) => {
   try {
     let [userWallet] = await walletSchema.find({ user_id: user_id }).lean();
+    //console.log('cuy', userWallet)
     return userWallet;
   } catch (_) {
     return;
@@ -31,14 +32,17 @@ const setUserBalance = async (user_id, balance) => {
       { balance: userBalance },
     );
   }
+
+
 };
 
 const getUserBalance = async (user_id) => {
-  const userWallet = await getUserWallet(user_id);
+  const userWallet = getUserWallet(user_id);
   return userWallet.balance;
 };
 
 module.exports = {
+  schema: walletSchema,
   createUserWallet,
   getUserWallet,
   setUserBalance,

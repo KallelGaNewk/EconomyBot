@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
-const config = require('../config/config.js');
-const db = require('quick.db');
+const { developers } = require('../config/config.js');
+const { getUserBalance, createUserWallet, setUserBalance } = require('../utils/walletUtils');
 
 module.exports = {
   name: 'editbal',
@@ -11,24 +11,26 @@ module.exports = {
   guildOnly: false,
   permission: '*',
   async execute(client, message, args) {
-    if (message.author.id !== '356634817544323084')
+    if (!developers.includes(message.author.id)) {
       return message.channel.send(":x: **You don't have permission");
+    }
 
     let user =
-      message.mentions.users.first() ||
-      client.users.cache.get(args[0]) ||
-      message.author;
+      message.mentions.users.first() || client.users.cache.get(args[0]);
 
-    let balance = await db.get(`user_${user.id}.balance`);
-    if (!balance || balance < 0) {
-      await db.set(`user_${message.author.id}`, { balance: 0 });
-      balance = await db.get(`user_${message.author.id}.balance`);
+    if (!user) {
+      return message.channel.send(":x: **Mention a valid user");
+    }
+
+    let balance = getUserBalance(message.author.id);
+
+    if (balance === undefined) {
+			console.log(balance)
+      balance = createUserWallet(user.id, 0);
     }
 
     let newBalance = parseInt(args[1]);
-    await db.add(`user_${user.id}.balance`, newBalance);
-
-    balance = await db.get(`user_${user.id}.balance`);
+    balance = setUserBalance(user.id, newBalance)
 
     let embed = new MessageEmbed()
       .setDescription(`New \`${user.tag}\` balance: **\`$${balance}\`**`)
