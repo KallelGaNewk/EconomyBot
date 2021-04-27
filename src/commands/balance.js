@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const config = require('../config/config.js');
-const db = require('quick.db');
+const WalletSchema = require('../database/WalletSchema')
 
 module.exports = {
 	name: 'balance',
@@ -13,11 +13,20 @@ module.exports = {
 }
 
 module.exports.execute = async (client, message, args) => {
-  let balance = await db.get(`user_${message.author.id}.balance`);
-  if (!balance || balance < 0) {
-		await db.set(`user_${message.author.id}`, { balance: 0 })
-		balance = await db.get(`user_${message.author.id}.balance`);
-  }
+	let balance = 0
+	let userWallet = await WalletSchema.find({user_id: message.author.id}).lean()
+
+	if (!userWallet.length) {
+		await WalletSchema.create({ user_id: message.author.id, balance: balance})
+	} else {
+		userWallet = userWallet[0]
+
+		if (!userWallet.balance || userWallet.balance < 0) {
+			await WalletSchema.findOneAndUpdate({user_id: message.author.id}, {balance: balance})
+		} else {
+			balance = userWallet.balance
+		}
+	}
 
 	const embed = new MessageEmbed()
 		.setTitle('Your balance')
