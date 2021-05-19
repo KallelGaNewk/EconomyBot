@@ -21,6 +21,6 @@
     "discord.js": "^12.5.3",
     "dotenv": "^9.0.2",
     "moment": "^2.29.1",
-    "mongoose": "^5.12.9"
+    "mongoose": "^5.12.10"
   }
 }
